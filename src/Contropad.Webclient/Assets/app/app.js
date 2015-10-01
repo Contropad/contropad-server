@@ -28,7 +28,6 @@
     };
 
     this.onGamepadTouchEnd = function (e) {
-        console.log(e);
         e.preventDefault();
         e.stopPropagation();
 
@@ -44,9 +43,8 @@
             container: this.containerEl,
             mouseSupport: true
         });
-       
 
-        $('[data-gamepad]')
+        $(this.containerEl).find('[data-gamepad]')
             .on('touchstart mousedown', this.onGamepadTouchStart)
             .on('touchend mouseup', this.onGamepadTouchEnd);
 
@@ -97,7 +95,7 @@
                     directions: newState
                 }));
             },
-            onButtonChange: function(ev) {
+            onButtonChange: function (ev) {
                 connection.send(JSON.stringify({
                     button: ev.button,
                     id: controllerId,
