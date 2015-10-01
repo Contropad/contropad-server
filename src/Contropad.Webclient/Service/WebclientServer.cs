@@ -5,9 +5,11 @@ using Nancy.Hosting.Self;
 
 namespace Contropad.Webclient.Service
 {
+    /// <summary>
+    /// Hosts the website with the controllers
+    /// </summary>
     public class WebclientServer : IDisposable
     {
-        private Task webserverTask;
         private NancyHost host;
 
         private readonly string _hostname;

@@ -13,8 +13,7 @@ namespace Contropad.Webclient.Controllers
         {
             Get["/controller/{id}"] = parameters => View["controller.html", new
             {
-                id = parameters.id,
-                hostname = "192.168.2.3"
+                id = parameters.id
             }];
         }
     }
