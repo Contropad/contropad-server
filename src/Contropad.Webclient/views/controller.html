@@ -3,153 +3,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <style>
-        body {
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-            background-color: #BBB;
-        }
+    <!-- Stylesheets -->
+    <link href="/assets/css/main.css" rel="stylesheet"></link>
 
-        button {
-            height: 100px;
-            width: 100px;
-        }
-
-        #container {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-        }
-    </style>
+    <!-- Javascript -->
+    <script type="text/javascript">
+        var controllerId =  @Model.id;;
+    </script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/Assets/vendor/virtual-joystick/virtual-joystick.js"></script>
+    <script src="/Assets/app/utils.js"></script>
+    <script src="/Assets/app/app.js"></script>
 </head>
 <body>
     <div id="container">
-
         <div id="button"></div>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <button data-gamepad="1">Button 1</button>
         <button data-gamepad="2">Button 2</button><br />
         <button data-gamepad="3">Button 3</button>
         <button data-gamepad="4">Button 4</button>
-        <div id="chat"></div>
     </div>
-    <script src="/assets/vendor/virtual-joystick/virtual-joystick.js"></script>
-    <script>
-        var isFullscreen = false;
-
-        // Find the right method, call on correct element
-        function launchIntoFullscreen(element) {
-            if(element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if(element.mozRequestFullScreen) {
-                element.mozRequestFullScreen();
-            } else if(element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen();
-            } else if(element.msRequestFullscreen) {
-                element.msRequestFullscreen();
-            }
-        }
-
-        var controllerId = @Model.id;;
-
-        $(function() {
-
-            var connection = new WebSocket('ws://' + window.location.hostname + ':8181');
-  
-            connection.onopen = function() {
-
-            };
-
-            // Log errors
-            connection.onerror = function(error) {
-
-            };
-
-            // Log messages from the server
-            connection.onmessage = function(e) {
-
-            };
-
-            var joystick = new VirtualJoystick({
-                container: document.getElementById('container'),
-                mouseSupport: true
-            });
-
-            var lastState = {
-                right: false,
-                up: false,
-                left: false,
-                down: false
-            };
-
-            var updateState = function() {
-                var changed = false,
-                    newDirections = {
-                        right: joystick.right(),
-                        up: joystick.up(),
-                        left: joystick.left(),
-                        down: joystick.down()
-                    };
-
-                for (var prop in lastState) {
-                    if (lastState.hasOwnProperty(prop)) {
-                        if (lastState[prop] !== newDirections[prop]) {
-                            console.log('changed', prop);
-                            changed = true;
-                            break;
-                        }
-                    }
-                }
-
-
-                if (changed) {
-                    lastState = newDirections;
-                    connection.send(JSON.stringify({
-                        type: 'direction',
-                        id: controllerId,
-                        directions: newDirections
-                    }));
-                }
-            };
-
-            $('[data-gamepad]')
-                .on('touchstart', function(e) {
-                    if (!isFullscreen) {
-                        launchIntoFullscreen(document.documentElement);
-                        isFullscreen = true;
-                    }
-
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    connection.send(JSON.stringify({
-                        button: $(this).data('gamepad'),
-                        type: 'button',
-                        id: controllerId,
-                        pressed: true
-                    }));
-                })
-                .on('touchend', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    connection.send(JSON.stringify({
-                        button: $(this).data('gamepad'),
-                        id: controllerId,
-                        type: 'button',
-                        pressed: false
-                    }));
-                });
-
-            setInterval(function() {
-                updateState();
-            }, 10);
-        });
-
-    </script>
 </body>
 </html>
