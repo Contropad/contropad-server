@@ -55,12 +55,11 @@
             }
         }
 
-
         var controllerId = @Model.id;;
-        var hostname = "@Model.hostname;";
+
         $(function() {
 
-            var connection = new WebSocket('ws://' + hostname + ':8181');
+            var connection = new WebSocket('ws://' + window.location.hostname + ':8181');
   
             connection.onopen = function() {
 
