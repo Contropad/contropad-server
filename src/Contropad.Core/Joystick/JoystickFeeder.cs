@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using vJoyInterfaceWrap;
@@ -11,7 +8,7 @@ namespace Contropad.Core.Joystick
 {
     public class JoystickFeeder
     {
-        protected ConcurrentDictionary<uint, JoystickAxisState> joystickStates;
+        private readonly ConcurrentDictionary<uint, JoystickAxisState> _joystickStates;
 
         private vJoy _joy;
 
@@ -21,7 +18,7 @@ namespace Contropad.Core.Joystick
         public JoystickFeeder()
         {
             _joy = new vJoy();
-            joystickStates = new ConcurrentDictionary<uint, JoystickAxisState>();
+            _joystickStates = new ConcurrentDictionary<uint, JoystickAxisState>();
 
             _joy.GetVJDAxisMax(1, HID_USAGES.HID_USAGE_X, ref maxval);
             percentage = maxval / 100;
@@ -29,23 +26,23 @@ namespace Contropad.Core.Joystick
 
         public void UpdateState(uint id, JoystickAxisState axisState)
         {
-            if (!joystickStates.ContainsKey(id))
+            if (!_joystickStates.ContainsKey(id))
                 ActivateJoystick(id);
 
-            joystickStates.AddOrUpdate(id, axisState, (u, joystickState) => axisState);
+            _joystickStates.AddOrUpdate(id, axisState, (u, joystickState) => axisState);
         }
 
         public void UpdateButtonState(uint id, JoystickButtonState buttonState)
         {
-            if (!joystickStates.ContainsKey(id))
+            if (!_joystickStates.ContainsKey(id))
                 ActivateJoystick(id);
 
-            _joy.SetBtn(buttonState.Pressed, buttonState.id, buttonState.ButtonId);
+            _joy.SetBtn(buttonState.Pressed, buttonState.Id, buttonState.ButtonId);
         }
 
         protected VjdStat VerifyStatus(uint id)
         {
-            VjdStat status = _joy.GetVJDStatus(id);
+            var status = _joy.GetVJDStatus(id);
             switch (status)
             {
                 case VjdStat.VJD_STAT_OWN:
@@ -64,7 +61,7 @@ namespace Contropad.Core.Joystick
                 default:
                     Console.WriteLine("vJoy Device {0} general error\nCannot continue\n", id);
                     throw new Exception();
-            };
+            }
 
             return status;
         }
@@ -87,12 +84,12 @@ namespace Contropad.Core.Joystick
             {
                 while (!token.IsCancellationRequested)
                 {
-                    foreach (var joystick in joystickStates)
+                    foreach (var joystick in _joystickStates)
                     {
                         var state = joystick.Value;
                         var id = joystick.Key;
-                        _joy.SetAxis(state.x * (int)percentage, id, HID_USAGES.HID_USAGE_X);
-                        _joy.SetAxis(state.y * (int)percentage, id, HID_USAGES.HID_USAGE_Y);
+                        _joy.SetAxis(state.X * (int)percentage, id, HID_USAGES.HID_USAGE_X);
+                        _joy.SetAxis(state.Y * (int)percentage, id, HID_USAGES.HID_USAGE_Y);
                     }
                     await Task.Delay(20, token);
                 }

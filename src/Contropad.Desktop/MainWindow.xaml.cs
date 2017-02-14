@@ -1,57 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Contropad.Core.Joystick;
 using Contropad.Core.Streams;
 using Contropad.Webclient.Service;
-using System.Windows.Controls;
-using ContextMenu = System.Windows.Controls.ContextMenu;
-using MenuItem = System.Windows.Controls.MenuItem;
 
 namespace Contropad.Desktop
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         private JoystickFeeder _feeder;
         private WebsocketStream _websocketStream;
         private JoystickStreamHandler _streamHandler;
         private WebclientServer _httpServer;
-        private System.Windows.Forms.NotifyIcon _icon;
-
-        protected string SelectedIP { get; set; }
+        private readonly System.Windows.Forms.NotifyIcon _icon;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _icon = new System.Windows.Forms.NotifyIcon();
-            _icon.Click += new EventHandler(notifyIcon_Click);
-            _icon.Icon = System.Drawing.Icon.FromHandle(Properties.Resources.joystick.GetHicon());
-            _icon.Text = "Contropad Server";
-        }
-
-        private void notifyIcon_Click(object sender, EventArgs e)
-        {
-            
+            _icon = new System.Windows.Forms.NotifyIcon
+            {
+                Icon = System.Drawing.Icon.FromHandle(Properties.Resources.joystick.GetHicon()),
+                Text = "Contropad Server"
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
