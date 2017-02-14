@@ -10,6 +10,11 @@ namespace Contropad.Core.Joystick
     public interface IJoystickUpdate
     {
         uint id { get; }
+
+        /// <summary>
+        /// Sends the update to the feeder
+        /// </summary>
+        void Update(JoystickFeeder feeder);
     }
 
     public class JoystickAxisState : IJoystickUpdate
@@ -25,6 +30,11 @@ namespace Contropad.Core.Joystick
         /// Position of the Y axis in percentages
         /// </summary>
         public int y { get; set; }
+
+        public void Update(JoystickFeeder feeder)
+        {
+            feeder.UpdateState(id, this);
+        }
     }
 
     public class JoystickButtonState : IJoystickUpdate
@@ -33,5 +43,11 @@ namespace Contropad.Core.Joystick
 
         public uint ButtonId { get; set; }
         public bool Pressed { get; set; }
+
+
+        public void Update(JoystickFeeder feeder)
+        {
+            feeder.UpdateButtonState(id, this);
+        }
     }
 }
