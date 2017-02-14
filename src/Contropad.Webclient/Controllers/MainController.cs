@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nancy;
+﻿using Nancy;
 
 namespace Contropad.Webclient.Controllers
 {
@@ -13,7 +8,7 @@ namespace Contropad.Webclient.Controllers
         {
             Get["/controller/{id}"] = parameters => View["controller.html", new
             {
-                id = parameters.id
+                parameters.id
             }];
         }
     }

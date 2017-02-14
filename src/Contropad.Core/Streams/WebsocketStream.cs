@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Contropad.Core.Joystick;
 using Fleck;
 using Newtonsoft.Json.Linq;
@@ -12,10 +10,10 @@ namespace Contropad.Core.Streams
     public class WebsocketStream : IDisposable
     {
         private string _hostname;
-        private WebSocketServer server;
+        private WebSocketServer _server;
         private ConcurrentDictionary<int, IObserver<IJoystickUpdate>> _observers;
 
-        private int counter = 0;
+        private int _counter;
 
         public WebsocketStream(string hostname)
         {
@@ -25,15 +23,15 @@ namespace Contropad.Core.Streams
 
         public void Start()
         {
-            server = new WebSocketServer(_hostname);
-            server.Start(HandleWebsocket);
+            _server = new WebSocketServer(_hostname);
+            _server.Start(HandleWebsocket);
         }
 
         public IObservable<IJoystickUpdate> CreateStream()
         {
             return Observable.Create<IJoystickUpdate>(o =>
             {
-                var id = counter++;
+                var id = _counter++;
                 _observers.AddOrUpdate(id, o, (x, y) => o);
                 return () => _observers.TryRemove(id, out o);
             });
@@ -71,7 +69,7 @@ namespace Contropad.Core.Streams
                     {
                         ButtonId = button,
                         Pressed = pressed,
-                        id = id
+                        Id = id
                     };
                 case "direction":
                     int x = 50;
@@ -88,9 +86,9 @@ namespace Contropad.Core.Streams
 
                     return new JoystickAxisState
                     {
-                        x = x,
-                        y = y,
-                        id = id
+                        X = x,
+                        Y = y,
+                        Id = id
                     };
                 default:
                     throw new Exception("Invalid message received!");
@@ -102,7 +100,7 @@ namespace Contropad.Core.Streams
             foreach(var observer in _observers.Values)
                 observer.OnCompleted();
 
-            server.Dispose();
+            _server.Dispose();
         }
     }
 }

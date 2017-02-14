@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contropad.Core.Joystick
 {
     public class JoystickStreamHandler : IObserver<IJoystickUpdate>
     {
-        private JoystickFeeder _feeder;
+        private readonly JoystickFeeder _feeder;
 
         public JoystickStreamHandler(JoystickFeeder feeder)
         {

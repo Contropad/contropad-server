@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Contropad.Webclient.Bootstrap;
 using Nancy.Hosting.Self;
 
@@ -10,7 +9,7 @@ namespace Contropad.Webclient.Service
     /// </summary>
     public class WebclientServer : IDisposable
     {
-        private NancyHost host;
+        private NancyHost _host;
 
         private readonly string _hostname;
 
@@ -21,16 +20,16 @@ namespace Contropad.Webclient.Service
 
         public void Start()
         {
-            host = new NancyHost(new Uri(_hostname), new CustomBoostrapper(), new HostConfiguration
+            _host = new NancyHost(new Uri(_hostname), new CustomBoostrapper(), new HostConfiguration
             {
                 RewriteLocalhost = true
             });
-            host.Start();
+            _host.Start();
         }
 
         public void Dispose()
         {
-            host.Dispose();
+            _host.Dispose();
         }
     }
 }
