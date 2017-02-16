@@ -91,7 +91,7 @@ namespace Contropad.Core.Joystick
                         _joy.SetAxis(state.X * (int)percentage, id, HID_USAGES.HID_USAGE_X);
                         _joy.SetAxis(state.Y * (int)percentage, id, HID_USAGES.HID_USAGE_Y);
                     }
-                    await Task.Delay(20, token);
+                    await Task.Delay(5, token);
                 }
             }, token);
         }
