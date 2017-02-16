@@ -6,8 +6,48 @@
 }
 
 button {
-    height: 100px;
-    width: 100px;
+    height: 50%;
+    width: 200px;
+}
+
+.button-up {
+    width: 210px;
+    height: 110px;
+    right: 0px;
+    top: 110px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.button-up span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background-color: #0079C6;
+    transform-origin: 0 100%;
+    transform: rotate(45deg);
+}
+
+.button-down {
+    width: 210px;
+    height: 110px;
+    right: 0px;
+    top: 0;
+    position: absolute;
+    overflow: hidden;
+}
+
+.button-down span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-color: #0079C6;
+    transform-origin: 0 100%;
+    transform: rotate(-45deg);
 }
 
 #container {
@@ -18,4 +58,16 @@ button {
     margin: 0;
     -webkit-user-select: none;
     -moz-user-select: none;
+}
+
+.button-container {
+    float: right;
+    height: 100%;
+}
+
+
+#buttons {
+    position: relative;
+    height: 100%;
+    right: 50px;
 }

@@ -18,10 +18,20 @@
 <body>
     <div id="container">
         <div id="button"></div>
-        <button data-gamepad="1">Button 1</button>
-        <button data-gamepad="2">Button 2</button><br />
-        <button data-gamepad="3">Button 3</button>
-        <button data-gamepad="4">Button 4</button>
+        <div class="button-container">
+            <svg id="buttons" viewbox="0 0 100 100" preserveAspectRatio="xMaxYMax">
+                <polygon data-gamepad="1" points="0,0 100,0 50,50" fill="lime" />
+                <polygon data-gamepad="2" points="0,100 100,100 50,50" fill="blue" />
+                <polygon data-gamepad="3" points="0,0 0,100 50,50" fill="red" />
+                <polygon data-gamepad="4" points="100,0 100,100 50,50" fill="yellow" />
+            </svg>
+            <!--
+            <button data-gamepad="1">Button 1</button>
+            <button data-gamepad="2">Button 2</button><br />
+            <button data-gamepad="3">Button 3</button>
+            <button data-gamepad="4">Button 4</button>    
+            -->
+        </div>
     </div>
 </body>
 </html>
