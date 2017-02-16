@@ -21,8 +21,6 @@
         e.preventDefault();
         e.stopPropagation();
 
-        console.log('start', $(this).data('gamepad'));
-
         opts.onButtonChange({
             button: $(this).data('gamepad'),
             pressed: true
@@ -32,8 +30,6 @@
     this.onGamepadTouchEnd = function (e) {
         e.preventDefault();
         e.stopPropagation();
-
-        console.log('end', $(this).data('gamepad'));
 
         opts.onButtonChange({
             button: $(this).data('gamepad'),
