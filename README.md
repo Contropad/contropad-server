@@ -1,7 +1,18 @@
-# ![Contropad](media/joystick.png)
+<h1 align="center">
+  <img src="media/joystick.png" width="250">
+  <br>
+  contropad-server
+  <br>
+</h1>
 
-Use your smartphone as a gamepad
+<h4 align="center">
+  Use your smartphone as a gamepad
+</h4>
 
+<p align="center">
+  <a href="#build">Build</a> •
+  <a href="#usage">Usage</a>
+</p>
 
 ### Build
 
