@@ -9,9 +9,9 @@ namespace Contropad.Core.Streams
 {
     public class WebsocketStream : IDisposable
     {
-        private string _hostname;
+        private readonly string _hostname;
         private WebSocketServer _server;
-        private ConcurrentDictionary<int, IObserver<IJoystickUpdate>> _observers;
+        private readonly ConcurrentDictionary<int, IObserver<IJoystickUpdate>> _observers;
 
         private int _counter;
 
@@ -44,7 +44,7 @@ namespace Contropad.Core.Streams
         {
             socket.OnMessage = message =>
             {
-                var update = ReadMessage(message);
+                var update = DecodeMessage(message);
                 foreach (var observer in _observers.Values)
                     observer.OnNext(update);
             };
@@ -53,8 +53,7 @@ namespace Contropad.Core.Streams
         /// <summary>
         /// Handles a JSON string message
         /// </summary>
-        /// <param name="message"></param>
-        private IJoystickUpdate ReadMessage(string message)
+        private IJoystickUpdate DecodeMessage(string message)
         {
             var obj = JObject.Parse(message);
             var id = (uint)obj["id"];

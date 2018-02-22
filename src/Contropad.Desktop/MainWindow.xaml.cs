@@ -53,9 +53,12 @@ namespace Contropad.Desktop
 
         private void StartServer(string ip)
         {
+            var webserverPort = 1236;
+            var websocketPort = 8181;
+
             _feeder = new JoystickFeeder();
-            _httpServer = new WebclientServer("http://" + ip + ":1236");
-            _websocketStream = new WebsocketStream("ws://" + ip + ":8181");
+            _httpServer = new WebclientServer($"http://{ip}:{webserverPort}");
+            _websocketStream = new WebsocketStream($"ws://{ip}:{websocketPort}");
             _streamHandler = new JoystickStreamHandler(_feeder);
             _websocketStream.CreateStream().Subscribe(_streamHandler);
             _websocketStream.Start();

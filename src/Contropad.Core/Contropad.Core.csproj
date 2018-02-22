@@ -67,6 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Joystick\JoystickAxisState.cs" />
+    <Compile Include="Joystick\JoystickButtonState.cs" />
     <Compile Include="Joystick\JoystickFeeder.cs" />
     <Compile Include="Joystick\JoystickState.cs" />
     <Compile Include="Joystick\JoystickStreamHandler.cs" />

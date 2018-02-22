@@ -10,18 +10,17 @@ namespace Contropad.Core.Joystick
     {
         private readonly ConcurrentDictionary<uint, JoystickAxisState> _joystickStates;
 
-        private vJoy _joy;
-
-        private long maxval;
-        private decimal percentage;
+        private readonly vJoy _joy;
+        private readonly long _maxValue;
+        private readonly decimal _percentage;
 
         public JoystickFeeder()
         {
             _joy = new vJoy();
             _joystickStates = new ConcurrentDictionary<uint, JoystickAxisState>();
 
-            _joy.GetVJDAxisMax(1, HID_USAGES.HID_USAGE_X, ref maxval);
-            percentage = maxval / 100;
+            _joy.GetVJDAxisMax(1, HID_USAGES.HID_USAGE_X, ref _maxValue);
+            _percentage = _maxValue / 100;
         }
 
         public void UpdateState(uint id, JoystickAxisState axisState)
@@ -48,6 +47,7 @@ namespace Contropad.Core.Joystick
                 case VjdStat.VJD_STAT_OWN:
                     Console.WriteLine("vJoy Device {0} is already owned by this feeder\n", id);
                     break;
+
                 case VjdStat.VJD_STAT_FREE:
                     Console.WriteLine("vJoy Device {0} is free\n", id);
                     break;
@@ -55,9 +55,11 @@ namespace Contropad.Core.Joystick
                 case VjdStat.VJD_STAT_BUSY:
                     Console.WriteLine("vJoy Device {0} is already owned by another feeder\nCannot continue\n", id);
                     throw new Exception();
+
                 case VjdStat.VJD_STAT_MISS:
                     Console.WriteLine("vJoy Device {0} is not installed or disabled\nCannot continue\n", id);
                     throw new Exception();
+
                 default:
                     Console.WriteLine("vJoy Device {0} general error\nCannot continue\n", id);
                     throw new Exception();
@@ -88,8 +90,9 @@ namespace Contropad.Core.Joystick
                     {
                         var state = joystick.Value;
                         var id = joystick.Key;
-                        _joy.SetAxis(state.X * (int)percentage, id, HID_USAGES.HID_USAGE_X);
-                        _joy.SetAxis(state.Y * (int)percentage, id, HID_USAGES.HID_USAGE_Y);
+                        _joy.SetAxis(state.X * (int)_percentage, id, HID_USAGES.HID_USAGE_X);
+                        _joy.SetAxis(state.Y * (int)_percentage, id, HID_USAGES.HID_USAGE_Y);
+                        _joy.SetAxis(0, id, HID_USAGES.HID_USAGE_Z);
                     }
                     await Task.Delay(5, token);
                 }
